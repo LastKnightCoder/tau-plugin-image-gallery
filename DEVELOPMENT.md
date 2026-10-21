@@ -11,7 +11,7 @@ pnpm install:local
 
 ## SDK
 
-图册用到的 `useElement`、外框 `frame`、`BlockToolbar`、`MediaImage`、`useResourceUpload`、`useMediaViewer`、节点资源声明 `resources` 与 `@tau/ui` 的 `Sortable` 尚未发布到 npm。`vendor/` 下是从 Tau 主仓库打包的开发版 SDK，SDK 发布后把 `package.json` 里的 `@tau/plugins`、`@tau/ui` 改为对应的 npm 版本并删除 `vendor/`，同时把 `manifest.json` 的 `minAppVersion` 提到包含这些能力的客户端版本。
+依赖公开的 `@xiongtao.xt/tau-plugins@0.33.0` 与 `@xiongtao.xt/tau-ui@0.3.0`（经 npm 别名安装为 `@tau/plugins`、`@tau/ui`），运行时由 Tau 提供。图册用到的外框 `frame`、`useElement`、`BlockToolbar`、`MediaImage`、`useResourceUpload`、`useMediaViewer`、资源声明 `resources` 与 `Sortable` 从这个版本开始提供。
 
 ## 数据
 
