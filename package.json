@@ -1,0 +1,41 @@
+{
+  "name": "tau-plugin-image-gallery",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "pnpm check && node build.mjs",
+    "install:local": "node install-local.mjs"
+  },
+  "dependencies": {
+    "@tau/plugins": "file:vendor/tau-plugins-next.tgz",
+    "@tau/ui": "file:vendor/tau-ui-next.tgz",
+    "lucide-react": "0.563.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "swiper": "11.2.10"
+  },
+  "devDependencies": {
+    "@tailwindcss/node": "4.1.17",
+    "@tailwindcss/oxide": "4.1.17",
+    "@types/react": "19.2.0",
+    "@types/react-dom": "19.2.0",
+    "adm-zip": "0.5.16",
+    "esbuild": "0.25.12",
+    "jsdom": "24.1.3",
+    "tailwindcss": "4.1.17",
+    "typescript": "5.8.3",
+    "vitest": "3.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LastKnightCoder/tau-plugin-image-gallery.git"
+  }
+}
