@@ -9,7 +9,7 @@ pnpm install:local
 
 `pnpm build` 先做类型检查，再打包 `dist/tau.image-gallery-<版本>.zip`。组件的 Tailwind 类由 `src/tailwind.css` 在构建时编译，接在轮播组件的样式之后写入 `main.css`。
 
-类名一律带 `ig:` 前缀（如 `ig:flex ig:md:hidden`）。插件样式和 Tau、博客模板的样式在同一页面里，不带前缀的工具类会排在宿主的响应式写法之后把它们覆盖掉；构建发现不带前缀的工具类会直接报错。
+类名一律带 `ig:` 前缀（如 `ig:flex ig:md:hidden`）。插件样式和 Tau、博客模板的样式在同一页面里，不带前缀的工具类会排在宿主的响应式写法之后把它们覆盖掉。开启前缀后，不带前缀的类不会生成样式；构建产物里出现不带前缀的类选择器会直接报错。
 
 ## SDK
 
