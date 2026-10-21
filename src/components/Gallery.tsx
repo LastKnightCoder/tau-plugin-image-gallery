@@ -93,12 +93,12 @@ export default function Gallery({
   return (
     <div
       className={cn(
-        "relative",
-        wider && "w-[calc(100%+10em)] -translate-x-[5em]",
+        "ig:relative",
+        wider && "ig:w-[calc(100%+10em)] ig:-translate-x-[5em]",
       )}
     >
       {images.length > 0 ? (
-        <div className={cn(!readOnly && !selected && "cursor-pointer")}>
+        <div className={cn(!readOnly && !selected && "ig:cursor-pointer")}>
           {!readOnly && selected && (
             <BlockToolbar label="图册属性">
               {LAYOUTS.map(({ mode: value, label, Icon }) => (
@@ -157,7 +157,7 @@ export default function Gallery({
           type="button"
           disabled={readOnly}
           onClick={openSettings}
-          className="text-tau-body flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-[12px] border-none bg-[var(--ed-bg-surface)] py-10 text-[var(--ed-text-secondary)] shadow-[0_0_0_1px_var(--ed-border)] transition-colors hover:bg-[var(--ed-bg-hover)] disabled:cursor-default"
+          className="ig:text-tau-body ig:flex ig:w-full ig:cursor-pointer ig:items-center ig:justify-center ig:gap-2.5 ig:rounded-[12px] ig:border-none ig:bg-[var(--ed-bg-surface)] ig:py-10 ig:text-[var(--ed-text-secondary)] ig:shadow-[0_0_0_1px_var(--ed-border)] ig:transition-colors ig:hover:bg-[var(--ed-bg-hover)] ig:disabled:cursor-default"
         >
           <ImagePlus size={17} />
           添加图片到图册

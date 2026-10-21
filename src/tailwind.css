@@ -1,4 +1,5 @@
-@import "tailwindcss/theme.css" layer(theme);
+/* 类名统一加 ig: 前缀，插件的工具类不会覆盖 Tau 或博客模板的同名类 */
+@import "tailwindcss/theme.css" layer(theme) prefix(ig);
 @import "tailwindcss/utilities.css" layer(utilities) source(none);
 @import "@tau/plugins/tailwind.css";
 @source "./";

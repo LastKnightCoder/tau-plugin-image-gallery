@@ -151,13 +151,13 @@ const VerticalGallery = (props: VerticalGalleryProps) => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full"
+      className="ig:relative ig:w-full"
       style={{ height: layout.totalHeight || "auto" }}
     >
       {layout.items.map((item) => (
         <div
           key={item.id}
-          className="absolute cursor-pointer overflow-hidden"
+          className="ig:absolute ig:cursor-pointer ig:overflow-hidden"
           style={{
             left: item.left,
             top: item.top,
@@ -171,7 +171,7 @@ const VerticalGallery = (props: VerticalGalleryProps) => {
           <MediaImage
             url={item.url}
             alt={item.desc || ""}
-            className="h-full w-full object-cover"
+            className="ig:h-full ig:w-full ig:object-cover"
           />
         </div>
       ))}

@@ -87,9 +87,11 @@ const SectionTitle = ({
   children: ReactNode;
   extra?: ReactNode;
 }) => (
-  <div className="flex items-center gap-3">
-    <h3 className="text-ink-3 text-tau-meta font-medium">{children}</h3>
-    <span className="bg-line-1 h-px flex-1" />
+  <div className="ig:flex ig:items-center ig:gap-3">
+    <h3 className="ig:text-ink-3 ig:text-tau-meta ig:font-medium">
+      {children}
+    </h3>
+    <span className="ig:bg-line-1 ig:h-px ig:flex-1" />
     {extra}
   </div>
 );
@@ -136,17 +138,17 @@ function ImageTile({
   return (
     <div
       className={cn(
-        "bg-surface-hover rounded-tau-md hover:ring-line-2 group relative aspect-square cursor-grab overflow-hidden ring-2 ring-transparent transition-[box-shadow] duration-200",
-        dragging && "ring-accent cursor-grabbing",
+        "ig:bg-surface-hover ig:rounded-tau-md ig:hover:ring-line-2 ig:group ig:relative ig:aspect-square ig:cursor-grab ig:overflow-hidden ig:ring-2 ig:ring-transparent ig:transition-[box-shadow] ig:duration-200",
+        dragging && "ig:ring-accent ig:cursor-grabbing",
       )}
     >
       <MediaImage
         url={item.url}
         alt={item.desc || ""}
         draggable={false}
-        className="pointer-events-none h-full w-full object-cover"
+        className="ig:pointer-events-none ig:h-full ig:w-full ig:object-cover"
       />
-      <div className="group-hover:bg-overlay/50 pointer-events-none absolute inset-0 transition-colors duration-200" />
+      <div className="ig:group-hover:bg-overlay/50 ig:pointer-events-none ig:absolute ig:inset-0 ig:transition-colors ig:duration-200" />
       <IconButton
         onPointerDown={(event) => event.stopPropagation()}
         onClick={(event) => {
@@ -155,9 +157,9 @@ function ImageTile({
         }}
         aria-label="删除图片"
         title="删除图片"
-        className="bg-surface/90 text-ink-2 shadow-float enabled:hover:bg-danger enabled:hover:text-ink-inverse absolute right-1.5 top-1.5 size-6 rounded-full opacity-0 focus-visible:opacity-100 group-hover:opacity-100"
+        className="ig:bg-surface/90 ig:text-ink-2 ig:shadow-float ig:enabled:hover:bg-danger ig:enabled:hover:text-ink-inverse ig:absolute ig:right-1.5 ig:top-1.5 ig:size-6 ig:rounded-full ig:opacity-0 ig:focus-visible:opacity-100 ig:group-hover:opacity-100"
       >
-        <X className="size-3.5" />
+        <X className="ig:size-3.5" />
       </IconButton>
     </div>
   );
@@ -255,7 +257,7 @@ export function GallerySettings({
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="ig:flex ig:flex-col ig:gap-6">
       <FormField label="显示模式">
         {(field) => (
           <Select
@@ -267,9 +269,9 @@ export function GallerySettings({
         )}
       </FormField>
 
-      <section className="flex flex-col gap-4">
+      <section className="ig:flex ig:flex-col ig:gap-4">
         <SectionTitle>基础设置</SectionTitle>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="ig:grid ig:grid-cols-2 ig:gap-4">
           {setting.mode === GalleryMode.Horizontal && (
             <>
               <FormField label="图片高度">
@@ -294,7 +296,7 @@ export function GallerySettings({
                   />
                 )}
               </FormField>
-              <div className="col-span-2">
+              <div className="ig:col-span-2">
                 <FormField label="最后一行">
                   {(field) => (
                     <Select
@@ -321,7 +323,7 @@ export function GallerySettings({
             </FormField>
           )}
           {setting.mode === GalleryMode.Inline && (
-            <div className="col-span-2">
+            <div className="ig:col-span-2">
               <FormField label="图片显示">
                 {(field) => (
                   <Select
@@ -342,9 +344,9 @@ export function GallerySettings({
         />
       </section>
 
-      <section className="flex flex-col gap-4">
+      <section className="ig:flex ig:flex-col ig:gap-4">
         <SectionTitle>外观设置</SectionTitle>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="ig:grid ig:grid-cols-2 ig:gap-4">
           <FormField label="圆角">
             {(field) => (
               <Select<AppearancePreset>
@@ -368,10 +370,10 @@ export function GallerySettings({
         </div>
       </section>
 
-      <section className="flex flex-col gap-4">
+      <section className="ig:flex ig:flex-col ig:gap-4">
         <SectionTitle
           extra={
-            <span className="text-ink-3 text-tau-meta">
+            <span className="ig:text-ink-3 ig:text-tau-meta">
               {setting.images.length} 张图片
             </span>
           }
@@ -382,14 +384,14 @@ export function GallerySettings({
         {uploading && (
           <div
             role="status"
-            className="bg-accent-soft rounded-tau-md flex items-center gap-3 px-4 py-3"
+            className="ig:bg-accent-soft ig:rounded-tau-md ig:flex ig:items-center ig:gap-3 ig:px-4 ig:py-3"
           >
-            <Spinner className="size-5" />
-            <div className="flex-1">
-              <div className="text-accent-text text-tau-body font-medium">
+            <Spinner className="ig:size-5" />
+            <div className="ig:flex-1">
+              <div className="ig:text-accent-text ig:text-tau-body ig:font-medium">
                 上传中…
               </div>
-              <div className="text-ink-2 text-tau-meta">
+              <div className="ig:text-ink-2 ig:text-tau-meta">
                 成功 {progress.success} / 失败 {progress.error} / 总计{" "}
                 {progress.total}
               </div>
@@ -398,7 +400,7 @@ export function GallerySettings({
         )}
 
         {showLinkInput && (
-          <div className="flex items-center gap-2">
+          <div className="ig:flex ig:items-center ig:gap-2">
             <Input
               autoFocus
               type="url"
@@ -436,31 +438,31 @@ export function GallerySettings({
           type="file"
           multiple
           accept="image/*"
-          className="hidden"
+          className="ig:hidden"
           onChange={(event) => {
             const files = [...(event.target.files ?? [])];
             event.target.value = "";
             void uploadFiles(files);
           }}
         />
-        <div className="grid grid-cols-4 gap-3">
+        <div className="ig:grid ig:grid-cols-4 ig:gap-3">
           <Menu
             trigger={
               <button
                 type="button"
                 disabled={uploading}
                 className={cn(
-                  "border-line-2 bg-surface-hover text-ink-3 rounded-tau-md group flex aspect-square w-full cursor-pointer flex-col items-center justify-center gap-2 border-2 border-dashed outline-none",
-                  "ease-tau-out transition-colors duration-200 focus-visible:shadow-[var(--tau-focus-ring)]",
-                  "enabled:hover:border-accent enabled:hover:bg-accent-soft enabled:hover:text-accent-text",
-                  "aria-expanded:border-accent aria-expanded:bg-accent-soft aria-expanded:text-accent-text",
-                  "disabled:cursor-not-allowed disabled:opacity-50",
+                  "ig:border-line-2 ig:bg-surface-hover ig:text-ink-3 ig:rounded-tau-md ig:group ig:flex ig:aspect-square ig:w-full ig:cursor-pointer ig:flex-col ig:items-center ig:justify-center ig:gap-2 ig:border-2 ig:border-dashed ig:outline-none",
+                  "ig:ease-tau-out ig:transition-colors ig:duration-200 ig:focus-visible:shadow-[var(--tau-focus-ring)]",
+                  "ig:enabled:hover:border-accent ig:enabled:hover:bg-accent-soft ig:enabled:hover:text-accent-text",
+                  "ig:aria-expanded:border-accent ig:aria-expanded:bg-accent-soft ig:aria-expanded:text-accent-text",
+                  "ig:disabled:cursor-not-allowed ig:disabled:opacity-50",
                 )}
               >
-                <span className="bg-surface grid size-10 place-items-center rounded-full">
-                  <Plus className="size-5" />
+                <span className="ig:bg-surface ig:grid ig:size-10 ig:place-items-center ig:rounded-full">
+                  <Plus className="ig:size-5" />
                 </span>
-                <span className="text-tau-meta">添加图片</span>
+                <span className="ig:text-tau-meta">添加图片</span>
               </button>
             }
           >
@@ -477,7 +479,7 @@ export function GallerySettings({
             </Menu.Item>
           </Menu>
           <Sortable
-            className="contents"
+            className="ig:contents"
             items={setting.images}
             getKey={(item) => item.id}
             onMove={moveImage}
@@ -500,12 +502,12 @@ export function GallerySettings({
         </div>
 
         {setting.images.length === 0 && !uploading && (
-          <div className="flex flex-col items-center justify-center py-8 text-center">
-            <div className="bg-surface-hover text-ink-3 mb-4 grid size-16 place-items-center rounded-full">
-              <ImageIcon className="size-8" strokeWidth={1.5} />
+          <div className="ig:flex ig:flex-col ig:items-center ig:justify-center ig:py-8 ig:text-center">
+            <div className="ig:bg-surface-hover ig:text-ink-3 ig:mb-4 ig:grid ig:size-16 ig:place-items-center ig:rounded-full">
+              <ImageIcon className="ig:size-8" strokeWidth={1.5} />
             </div>
-            <p className="text-ink-2 text-tau-body">还没有添加图片</p>
-            <p className="text-ink-3 text-tau-meta mt-1">
+            <p className="ig:text-ink-2 ig:text-tau-body">还没有添加图片</p>
+            <p className="ig:text-ink-3 ig:text-tau-meta ig:mt-1">
               点击「添加图片」，或直接粘贴剪贴板里的图片
             </p>
           </div>

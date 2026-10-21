@@ -166,13 +166,13 @@ const HorizontalGallery = (props: HorizontalGalleryProps) => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full"
+      className="ig:relative ig:w-full"
       style={{ height: layout.totalHeight > 0 ? layout.totalHeight : "auto" }}
     >
       {layout.items.map((item) => (
         <div
           key={item.id}
-          className="absolute cursor-pointer overflow-hidden"
+          className="ig:absolute ig:cursor-pointer ig:overflow-hidden"
           style={{
             width: item.width,
             height: item.height,
@@ -199,7 +199,7 @@ const HorizontalGallery = (props: HorizontalGalleryProps) => {
       {/* 加载占位符 */}
       {!allLoaded && layout.items.length === 0 && (
         <div
-          className="h-48 animate-pulse rounded-[var(--tau-radius-sm)] bg-[var(--ed-bg-hover)]"
+          className="ig:h-48 ig:animate-pulse ig:rounded-[var(--tau-radius-sm)] ig:bg-[var(--ed-bg-hover)]"
           aria-label="图片加载中"
         />
       )}

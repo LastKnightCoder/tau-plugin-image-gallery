@@ -9,6 +9,8 @@ pnpm install:local
 
 `pnpm build` 先做类型检查，再打包 `dist/tau.image-gallery-<版本>.zip`。组件的 Tailwind 类由 `src/tailwind.css` 在构建时编译，接在轮播组件的样式之后写入 `main.css`。
 
+类名一律带 `ig:` 前缀（如 `ig:flex ig:md:hidden`）。插件样式和 Tau、博客模板的样式在同一页面里，不带前缀的工具类会排在宿主的响应式写法之后把它们覆盖掉；构建发现不带前缀的工具类会直接报错。
+
 ## SDK
 
 依赖公开的 `@xiongtao.xt/tau-plugins@0.33.0` 与 `@xiongtao.xt/tau-ui@0.3.0`（经 npm 别名安装为 `@tau/plugins`、`@tau/ui`），运行时由 Tau 提供。图册用到的外框 `frame`、`useElement`、`BlockToolbar`、`MediaImage`、`useResourceUpload`、`useMediaViewer`、资源声明 `resources` 与 `Sortable` 从这个版本开始提供。
