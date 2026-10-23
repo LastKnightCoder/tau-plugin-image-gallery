@@ -6,7 +6,7 @@ import { GalleryMode, type GallerySetting } from "../types";
 
 const fixture = vi.hoisted(() => ({ upload: vi.fn() }));
 vi.mock("@tau/plugins", () => ({
-  usePluginEnvironment: () => ({ input: { touch: true } }),
+  usePluginEnvironment: () => ({ input: { coarsePointer: true } }),
   useResourceUpload: () => fixture.upload,
   MediaImage: ({ url, ...props }: any) => <img src={url} {...props} />,
 }));

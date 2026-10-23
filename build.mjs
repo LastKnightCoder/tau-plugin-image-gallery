@@ -23,10 +23,10 @@ if (!/^[a-z0-9]+(?:[.-][a-z0-9]+)+$/.test(manifest.id))
 if (!/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(manifest.version))
   throw new Error("插件版本无效");
 // manifest 不写 main 时构建独立 Skill 包：没有代码入口，只打包 skills/ 目录
-const skillPackage = manifest.main === undefined;
+const skillPackage = !manifest.targets && manifest.main === undefined;
 let backend;
 let validateManifest;
-if (manifest.formatVersion === 3) {
+if (manifest.targets) {
   if (skillPackage) throw new Error("跨端插件必须有 JS 入口");
   validateManifest = (await import("@tau/plugins/portable")).buildPortablePluginManifest;
 } else if (skillPackage) {
@@ -231,7 +231,8 @@ try {
   delete packaged.skills;
   if (skills.ids.length) packaged.skills = skills.ids;
 
-  if (validateManifest) packaged = { ...packaged, ...validateManifest(packaged, { strict: true }) };
+  if (manifest.targets) packaged = validateManifest(manifest, { main: "main.js", integrity, ...(styles ? { styles: "main.css" } : {}), ...(skills.ids.length ? { skills: skills.ids } : {}) });
+  else if (validateManifest) validateManifest(packaged, { strict: true });
   await writeFile(
     path.join(staging, "manifest.json"),
     JSON.stringify(packaged, null, 2),

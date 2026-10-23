@@ -130,12 +130,12 @@ function ImageTile({
   item,
   dragging,
   onDelete,
-  touch = false,
+  coarsePointer = false,
 }: {
   item: ImageGalleryItem;
   dragging: boolean;
   onDelete(): void;
-  touch?: boolean;
+  coarsePointer?: boolean;
 }) {
   return (
     <div
@@ -159,7 +159,7 @@ function ImageTile({
         }}
         aria-label="删除图片"
         title="删除图片"
-        className={cn("ig:bg-surface/90 ig:text-ink-2 ig:shadow-float ig:enabled:hover:bg-danger ig:enabled:hover:text-ink-inverse ig:absolute ig:right-1.5 ig:top-1.5 ig:rounded-full ig:focus-visible:opacity-100 ig:group-hover:opacity-100", touch ? "ig:size-10 ig:opacity-100" : "ig:size-6 ig:opacity-0")}
+        className={cn("ig:bg-surface/90 ig:text-ink-2 ig:shadow-float ig:enabled:hover:bg-danger ig:enabled:hover:text-ink-inverse ig:absolute ig:right-1.5 ig:top-1.5 ig:rounded-full ig:focus-visible:opacity-100 ig:group-hover:opacity-100", coarsePointer ? "ig:size-10 ig:opacity-100" : "ig:size-6 ig:opacity-0")}
       >
         <X className="ig:size-3.5" />
       </IconButton>
@@ -171,7 +171,7 @@ export function GallerySettings({
   setting,
   onSettingChange,
 }: GallerySettingsProps) {
-  const touch = usePluginEnvironment().input.touch;
+  const { coarsePointer, finePointer } = usePluginEnvironment().input;
   const active = useRef(true);
   useEffect(() => { active.current = true; return () => { active.current = false; }; }, []);
   const uploadRef = useRef<HTMLInputElement>(null);
@@ -261,6 +261,12 @@ export function GallerySettings({
     images.splice(to, 0, moved);
     patch({ images });
   };
+  const moveControls = (index: number) => (
+    <div className="ig:mt-2 ig:flex ig:gap-2">
+      <Button size="sm" variant="secondary" disabled={index === 0} aria-label={`前移图片 ${index + 1}`} onClick={() => moveImage(index, index - 1)}>前移</Button>
+      <Button size="sm" variant="secondary" disabled={index === setting.images.length - 1} aria-label={`后移图片 ${index + 1}`} onClick={() => moveImage(index, index + 1)}>后移</Button>
+    </div>
+  );
 
   return (
     <div className="ig:flex ig:flex-col ig:gap-6">
@@ -484,13 +490,10 @@ export function GallerySettings({
               输入链接
             </Menu.Item>
           </Menu>
-          {touch ? setting.images.map((item, index) => (
+          {!finePointer ? setting.images.map((item, index) => (
             <div key={item.id} aria-label={item.desc || `图片 ${index + 1}`}>
-              <ImageTile item={item} dragging={false} touch onDelete={() => patch({ images: setting.images.filter(image => image.id !== item.id) })} />
-              <div className="ig:mt-2 ig:flex ig:gap-2">
-                <Button size="sm" variant="secondary" disabled={index === 0} aria-label={`前移图片 ${index + 1}`} onClick={() => moveImage(index, index - 1)}>前移</Button>
-                <Button size="sm" variant="secondary" disabled={index === setting.images.length - 1} aria-label={`后移图片 ${index + 1}`} onClick={() => moveImage(index, index + 1)}>后移</Button>
-              </div>
+              <ImageTile item={item} dragging={false} coarsePointer={coarsePointer} onDelete={() => patch({ images: setting.images.filter(image => image.id !== item.id) })} />
+              {moveControls(index)}
             </div>
           )) : <Sortable
             className="ig:contents"
@@ -498,10 +501,12 @@ export function GallerySettings({
             getKey={(item) => item.id}
             onMove={moveImage}
             renderItem={(item, state) => (
-              <div {...state.handleProps} aria-label={item.desc || "图片"}>
+              <div aria-label={item.desc || "图片"}>
+                <div {...state.handleProps}>
                 <ImageTile
                   item={item}
                   dragging={state.dragging}
+                  coarsePointer={coarsePointer}
                   onDelete={() =>
                     patch({
                       images: setting.images.filter(
@@ -510,6 +515,8 @@ export function GallerySettings({
                     })
                   }
                 />
+                </div>
+                {moveControls(setting.images.findIndex(image => image.id === item.id))}
               </div>
             )}
           />}

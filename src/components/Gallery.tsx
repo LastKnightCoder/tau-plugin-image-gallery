@@ -14,7 +14,6 @@ import {
   BlockToolbarButton,
   BlockToolbarGap,
   useElement,
-  usePluginEnvironment,
   useMediaAppearance,
   useMediaViewer,
   type EditorElementRenderProps,
@@ -47,7 +46,6 @@ export default function Gallery({
   element,
 }: EditorElementRenderProps<ImageGalleryElement>) {
   const { readOnly, selected, update, openMenu } = useElement(element);
-  const { layout } = usePluginEnvironment();
   const openViewer = useMediaViewer(element);
   const appearance = useMediaAppearance();
   const [editing, setEditing] = useState<GallerySetting | null>(null);
@@ -93,10 +91,11 @@ export default function Gallery({
   };
 
   return (
+    <div className="ig:@container">
     <div
       className={cn(
         "ig:relative",
-        wider && layout !== "compact" && "ig:w-[calc(100%+10em)] ig:-translate-x-[5em]",
+        wider && "ig:@min-[60rem]:w-[calc(100%+10em)] ig:@min-[60rem]:-translate-x-[5em]",
       )}
     >
       {images.length > 0 ? (
@@ -191,6 +190,7 @@ export default function Gallery({
           )}
         </DialogBody>
       </Dialog>
+    </div>
     </div>
   );
 }
