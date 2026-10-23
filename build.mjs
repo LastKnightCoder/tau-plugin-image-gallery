@@ -26,7 +26,10 @@ if (!/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(manifest.version))
 const skillPackage = manifest.main === undefined;
 let backend;
 let validateManifest;
-if (skillPackage) {
+if (manifest.formatVersion === 3) {
+  if (skillPackage) throw new Error("跨端插件必须有 JS 入口");
+  validateManifest = (await import("@tau/plugins/portable")).buildPortablePluginManifest;
+} else if (skillPackage) {
   if (manifest.backend !== undefined || manifest.formatVersion !== 1)
     throw new Error("Skill 包使用格式 1，不能声明后台");
 } else if (manifest.backend !== undefined) {
@@ -220,7 +223,7 @@ try {
       .update(await readFile(path.join(staging, file)))
       .digest("hex");
   // skills 由 skills/ 目录生成，忽略 manifest 中手写的值
-  const packaged = {
+  let packaged = {
     ...manifest,
     integrity,
     ...(styles ? { styles: "main.css" } : {}),
@@ -228,7 +231,7 @@ try {
   delete packaged.skills;
   if (skills.ids.length) packaged.skills = skills.ids;
 
-  if (validateManifest) validateManifest(packaged, { strict: true });
+  if (validateManifest) packaged = { ...packaged, ...validateManifest(packaged, { strict: true }) };
   await writeFile(
     path.join(staging, "manifest.json"),
     JSON.stringify(packaged, null, 2),

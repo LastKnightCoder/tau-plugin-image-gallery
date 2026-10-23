@@ -19,7 +19,7 @@ import {
   Switch,
   cn,
 } from "@tau/ui";
-import { MediaImage, useResourceUpload } from "@tau/plugins";
+import { MediaImage, usePluginEnvironment, useResourceUpload } from "@tau/plugins";
 import {
   GalleryMode,
   type AppearancePreset,
@@ -130,10 +130,12 @@ function ImageTile({
   item,
   dragging,
   onDelete,
+  touch = false,
 }: {
   item: ImageGalleryItem;
   dragging: boolean;
   onDelete(): void;
+  touch?: boolean;
 }) {
   return (
     <div
@@ -157,7 +159,7 @@ function ImageTile({
         }}
         aria-label="删除图片"
         title="删除图片"
-        className="ig:bg-surface/90 ig:text-ink-2 ig:shadow-float ig:enabled:hover:bg-danger ig:enabled:hover:text-ink-inverse ig:absolute ig:right-1.5 ig:top-1.5 ig:size-6 ig:rounded-full ig:opacity-0 ig:focus-visible:opacity-100 ig:group-hover:opacity-100"
+        className={cn("ig:bg-surface/90 ig:text-ink-2 ig:shadow-float ig:enabled:hover:bg-danger ig:enabled:hover:text-ink-inverse ig:absolute ig:right-1.5 ig:top-1.5 ig:rounded-full ig:focus-visible:opacity-100 ig:group-hover:opacity-100", touch ? "ig:size-10 ig:opacity-100" : "ig:size-6 ig:opacity-0")}
       >
         <X className="ig:size-3.5" />
       </IconButton>
@@ -169,6 +171,9 @@ export function GallerySettings({
   setting,
   onSettingChange,
 }: GallerySettingsProps) {
+  const touch = usePluginEnvironment().input.touch;
+  const active = useRef(true);
+  useEffect(() => { active.current = true; return () => { active.current = false; }; }, []);
   const uploadRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [showLinkInput, setShowLinkInput] = useState(false);
@@ -184,7 +189,7 @@ export function GallerySettings({
 
   const addImages = useCallback(
     (urls: string[]) => {
-      if (!urls.length) return;
+      if (!urls.length || !active.current) return;
       const current = settingRef.current;
       onSettingChange({
         ...current,
@@ -206,6 +211,7 @@ export function GallerySettings({
         files.map((file) =>
           withTimeout(upload(file)).then(
             (url) => {
+              if (!active.current) return null;
               setProgress((value) => ({
                 ...value,
                 success: value.success + 1,
@@ -213,14 +219,14 @@ export function GallerySettings({
               return url;
             },
             () => {
-              setProgress((value) => ({ ...value, error: value.error + 1 }));
+              if (active.current) setProgress((value) => ({ ...value, error: value.error + 1 }));
               return null;
             },
           ),
         ),
       );
       addImages(results.filter((url): url is string => !!url));
-      setUploading(false);
+      if (active.current) setUploading(false);
     },
     [upload, addImages],
   );
@@ -231,13 +237,13 @@ export function GallerySettings({
         .filter((item) => item.type.startsWith("image/"))
         .map((item) => item.getAsFile())
         .filter((file): file is File => !!file);
-      if (!files.length) return;
+      if (!files.length || !upload) return;
       event.preventDefault();
       void uploadFiles(files);
     };
     document.addEventListener("paste", onPaste);
     return () => document.removeEventListener("paste", onPaste);
-  }, [uploadFiles]);
+  }, [uploadFiles, upload]);
 
   const closeLinkInput = () => {
     setLinkUrl("");
@@ -445,7 +451,7 @@ export function GallerySettings({
             void uploadFiles(files);
           }}
         />
-        <div className="ig:grid ig:grid-cols-4 ig:gap-3">
+        <div className="ig:grid ig:grid-cols-2 ig:gap-3 ig:sm:grid-cols-4">
           <Menu
             trigger={
               <button
@@ -478,7 +484,15 @@ export function GallerySettings({
               输入链接
             </Menu.Item>
           </Menu>
-          <Sortable
+          {touch ? setting.images.map((item, index) => (
+            <div key={item.id} aria-label={item.desc || `图片 ${index + 1}`}>
+              <ImageTile item={item} dragging={false} touch onDelete={() => patch({ images: setting.images.filter(image => image.id !== item.id) })} />
+              <div className="ig:mt-2 ig:flex ig:gap-2">
+                <Button size="sm" variant="secondary" disabled={index === 0} aria-label={`前移图片 ${index + 1}`} onClick={() => moveImage(index, index - 1)}>前移</Button>
+                <Button size="sm" variant="secondary" disabled={index === setting.images.length - 1} aria-label={`后移图片 ${index + 1}`} onClick={() => moveImage(index, index + 1)}>后移</Button>
+              </div>
+            </div>
+          )) : <Sortable
             className="ig:contents"
             items={setting.images}
             getKey={(item) => item.id}
@@ -498,7 +512,7 @@ export function GallerySettings({
                 />
               </div>
             )}
-          />
+          />}
         </div>
 
         {setting.images.length === 0 && !uploading && (
