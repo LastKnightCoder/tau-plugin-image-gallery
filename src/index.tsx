@@ -1,3 +1,4 @@
+import { editorMetrics } from "./metrics";
 import { Images } from "lucide-react";
 import {
   defineEditorElement,
@@ -78,5 +79,6 @@ export const galleryExtension: PluginEditorExtension = defineEditorExtension({
 export default definePlugin({
   ...__PLUGIN_META__,
   editorExtensions: [galleryExtension],
+  editorMetrics,
   editorCodecs: [galleryCodec],
 });
