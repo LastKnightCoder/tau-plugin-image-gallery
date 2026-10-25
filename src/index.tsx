@@ -27,6 +27,7 @@ export const galleryExtension: PluginEditorExtension = defineEditorExtension({
   elements: [
     defineEditorElement<ImageGalleryElement>({
       type: GALLERY_TYPE,
+      dataVersion: 1,
       kind: "block",
       isVoid: true,
       drag: true,
