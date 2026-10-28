@@ -1,6 +1,6 @@
 {
   "name": "tau-plugin-image-gallery",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "private": true,
   "type": "module",
   "license": "MIT",
