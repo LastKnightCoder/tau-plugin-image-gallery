@@ -11,16 +11,43 @@
     "图片",
     "gallery"
   ],
-  "version": "0.1.7",
+  "i18n": {
+    "zh-TW": {
+      "name": "圖冊",
+      "description": "在內文裡插入圖冊，支援橫向排版、瀑布流與輪播三種版面配置。",
+      "keywords": [
+        "圖冊",
+        "畫廊",
+        "圖片",
+        "gallery"
+      ]
+    },
+    "en-US": {
+      "name": "Gallery",
+      "description": "Insert image galleries into your documents with row, masonry, and carousel layouts.",
+      "keywords": [
+        "gallery",
+        "images",
+        "photos",
+        "carousel"
+      ]
+    }
+  },
+  "locales": [
+    "zh-CN",
+    "zh-TW",
+    "en-US"
+  ],
+  "version": "0.1.8",
   "targets": {
     "desktop": {
-      "minAppVersion": "0.59.5"
+      "minAppVersion": "0.68.0"
     },
     "android": {
-      "minAppVersion": "0.2.7"
+      "minAppVersion": "0.6.0"
     },
     "ios": {
-      "minAppVersion": "0.2.7"
+      "minAppVersion": "0.6.0"
     }
   }
 }
