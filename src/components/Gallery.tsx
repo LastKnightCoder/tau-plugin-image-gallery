@@ -14,6 +14,7 @@ import {
   BlockToolbarButton,
   BlockToolbarGap,
   useElement,
+  useI18n,
   useMediaAppearance,
   useMediaViewer,
   type EditorElementRenderProps,
@@ -24,16 +25,17 @@ import {
   type ImageGalleryElement,
 } from "../types";
 import { galleryActions } from "../actions";
+import { messages, type MessageKey } from "../i18n";
 import HorizontalGallery from "./HorizontalGallery";
 import VerticalGallery from "./VerticalGallery";
 import SwipeGallery from "./SwipeGallery";
 import { GallerySettings } from "./GallerySettings";
 
 const LAYOUTS = [
-  { mode: GalleryMode.Horizontal, label: "横排", Icon: Rows3 },
-  { mode: GalleryMode.Vertical, label: "瀑布流", Icon: Columns3 },
-  { mode: GalleryMode.Inline, label: "轮播", Icon: GalleryHorizontalEnd },
-] as const;
+  { mode: GalleryMode.Horizontal, label: "layout.horizontal", Icon: Rows3 },
+  { mode: GalleryMode.Vertical, label: "layout.vertical", Icon: Columns3 },
+  { mode: GalleryMode.Inline, label: "layout.carousel", Icon: GalleryHorizontalEnd },
+] as const satisfies readonly { mode: GalleryMode; label: MessageKey; Icon: typeof Rows3 }[];
 
 const settingOf = ({
   type: _type,
@@ -45,6 +47,7 @@ const settingOf = ({
 export default function Gallery({
   element,
 }: EditorElementRenderProps<ImageGalleryElement>) {
+  const { t } = useI18n(messages);
   const { readOnly, selected, update, openMenu } = useElement(element);
   const openViewer = useMediaViewer(element);
   const appearance = useMediaAppearance();
@@ -101,11 +104,11 @@ export default function Gallery({
       {images.length > 0 ? (
         <div className={cn(!readOnly && !selected && "ig:cursor-pointer")}>
           {!readOnly && selected && (
-            <BlockToolbar label="图册属性">
+            <BlockToolbar label={t("toolbar.properties")}>
               {LAYOUTS.map(({ mode: value, label, Icon }) => (
                 <BlockToolbarButton
                   key={value}
-                  title={label}
+                  title={t(label)}
                   icon={<Icon size={15} />}
                   active={mode === value}
                   onClick={() => update({ mode: value })}
@@ -113,21 +116,21 @@ export default function Gallery({
               ))}
               <BlockToolbarGap />
               <BlockToolbarButton
-                title="编辑图片"
+                title={t("toolbar.editImage")}
                 shortcut="Enter"
-                label="编辑图片"
+                label={t("toolbar.editImage")}
                 icon={<Images size={15} />}
                 onClick={openSettings}
               />
               <BlockToolbarButton
-                title="全屏预览"
+                title={t("toolbar.preview")}
                 shortcut="Space"
                 icon={<Maximize2 size={15} />}
                 onClick={() => preview()}
               />
               <BlockToolbarGap />
               <BlockToolbarButton
-                title="更多"
+                title={t("toolbar.more")}
                 icon={<MoreHorizontal size={15} />}
                 onClick={(event) => {
                   const rect = event.currentTarget.getBoundingClientRect();
@@ -161,13 +164,13 @@ export default function Gallery({
           className="ig:text-tau-body ig:flex ig:w-full ig:cursor-pointer ig:items-center ig:justify-center ig:gap-2.5 ig:rounded-[12px] ig:border-none ig:bg-[var(--ed-bg-surface)] ig:py-10 ig:text-[var(--ed-text-secondary)] ig:shadow-[0_0_0_1px_var(--ed-border)] ig:transition-colors ig:hover:bg-[var(--ed-bg-hover)] ig:disabled:cursor-default"
         >
           <ImagePlus size={17} />
-          添加图片到图册
+          {t("empty.addImages")}
         </button>
       )}
       <Dialog
         open={!!editing && !readOnly}
         onOpenChange={(next) => !next && setEditing(null)}
-        title="编辑图册"
+        title={t("dialog.title")}
         width={720}
         footer={
           <>
@@ -176,10 +179,10 @@ export default function Gallery({
               size="sm"
               onClick={() => setEditing(null)}
             >
-              取消
+              {t("action.cancel")}
             </Button>
             <Button variant="primary" size="sm" onClick={save}>
-              确定
+              {t("action.confirm")}
             </Button>
           </>
         }

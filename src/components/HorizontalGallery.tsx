@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MediaImage } from "@tau/plugins";
+import { MediaImage, useI18n } from "@tau/plugins";
 import type { AppearancePreset, ImageGalleryItem, LastRowMode } from "../types";
 import {
   calculateLayout,
@@ -8,6 +8,7 @@ import {
   type ImageDimension,
 } from "./layoutCalculator";
 import { appearanceStyle } from "../appearance";
+import { messages } from "../i18n";
 
 interface HorizontalGalleryProps {
   items: ImageGalleryItem[];
@@ -35,6 +36,7 @@ const HorizontalGallery = (props: HorizontalGalleryProps) => {
     onItemDoubleClick,
   } = props;
 
+  const { t } = useI18n(messages);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [dimensions, setDimensions] = useState<Map<string, ImageDimension>>(
@@ -200,7 +202,7 @@ const HorizontalGallery = (props: HorizontalGalleryProps) => {
       {!allLoaded && layout.items.length === 0 && (
         <div
           className="ig:h-48 ig:animate-pulse ig:rounded-[var(--tau-radius-sm)] ig:bg-[var(--ed-bg-hover)]"
-          aria-label="图片加载中"
+          aria-label={t("images.loading.aria")}
         />
       )}
     </div>

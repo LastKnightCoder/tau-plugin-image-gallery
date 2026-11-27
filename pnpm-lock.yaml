@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@tau/plugins':
-        specifier: npm:@xiongtao.xt/tau-plugins@0.45.0
-        version: '@xiongtao.xt/tau-plugins@0.45.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(slate-dom@0.147.0(slate@0.126.2))'
+        specifier: file:../../output/plugin-sdk/xiongtao.xt-tau-plugins-0.62.0.tgz
+        version: '@xiongtao.xt/tau-plugins@file:../../output/plugin-sdk/xiongtao.xt-tau-plugins-0.62.0.tgz(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(slate-dom@0.147.0(slate@0.126.2))'
       '@tau/ui':
         specifier: npm:@xiongtao.xt/tau-ui@0.5.0
         version: '@xiongtao.xt/tau-ui@0.5.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)'
@@ -705,8 +705,9 @@ packages:
   '@vitest/utils@3.2.4':
     resolution: {integrity: sha512-fB2V0JFrQSMsCo9HiSq3Ezpdv4iYaXRG1Sx8edX3MwxfyNn83mKiGzOcH+Fkxt4MHxr3y42fQi1oeAInqgX2QA==}
 
-  '@xiongtao.xt/tau-plugins@0.45.0':
-    resolution: {integrity: sha512-ZO9gBFFsqYf1ctfzY1It/dJ08XMoVrYRg5BkIUKVV3Vjs5rGHKELJ+UcYqXNp/j8ExqpCJFSmGFiyqEj2hDmUQ==}
+  '@xiongtao.xt/tau-plugins@file:../../output/plugin-sdk/xiongtao.xt-tau-plugins-0.62.0.tgz':
+    resolution: {integrity: sha512-WY3hWcq+JIigBsl1coTkO71S+EyCyuzn1MeX5E+f7BhGcDA/gy0ANYoi0MxRIN6A49R1QRLswtSWc1YPUUYgVQ==, tarball: file:../../output/plugin-sdk/xiongtao.xt-tau-plugins-0.62.0.tgz}
+    version: 0.62.0
     peerDependencies:
       react: 19.2.0
       react-dom: 19.2.0
@@ -920,6 +921,9 @@ packages:
   is-potential-custom-element-name@1.0.1:
     resolution: {integrity: sha512-bCYeRA2rVibKZd+s2625gGnGF/t7DSqDs4dP7CrLA1m7jKWz6pps0LpYLJN8Q64HtmPKJ1hrN3nzPNKFEKOUiQ==}
 
+  isomorphic.js@0.2.5:
+    resolution: {integrity: sha512-PIeMbHqMt4DnUP3MA/Flc0HElYjMXArsw1qwJZcm9sqR8mq3l8NYizFMty0pWwE/tzIGH3EKK5+jes5mAr85yw==}
+
   jiti@2.7.0:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
@@ -935,6 +939,11 @@ packages:
     peerDependenciesMeta:
       canvas:
         optional: true
+
+  lib0@0.2.120:
+    resolution: {integrity: sha512-/a2eRImR8sZbmMVKe2we1/KukDQkuPyPf8yol6epvCu2PH6hurjcRI3mdGFFAi0uGoRJGyns99JquZgxwW1tQg==}
+    engines: {node: '>=16'}
+    hasBin: true
 
   lightningcss-android-arm64@1.30.2:
     resolution: {integrity: sha512-BH9sEdOCahSgmkVhBLeU7Hc9DWeZ1Eb6wNS6Da8igvUwAe0sqROHddIlvU06q3WyXVEOYDZ6ykBZQnjTbmo4+A==}
@@ -1340,6 +1349,10 @@ packages:
 
   xmlchars@2.2.0:
     resolution: {integrity: sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==}
+
+  yjs@13.6.32:
+    resolution: {integrity: sha512-lfiJIIC4Xayt5ItynE407ehlE03pCjeOc4hkR4yxxvvNJ4kuiN25B0g+Qp8XagYz361LLL7DCzR5bvFJ81QKtQ==}
+    engines: {node: '>=16.0.0', npm: '>=8.0.0'}
 
   zustand@4.5.7:
     resolution: {integrity: sha512-CHOUy7mu3lbD6o6LJLfllpjkzhHXSBlX8B9+qPddUsIfeF5S/UZ5q0kmCsnRqT1UHFQZchNFDDzMbQsuesHWlw==}
@@ -1765,7 +1778,7 @@ snapshots:
       loupe: 3.2.1
       tinyrainbow: 2.0.0
 
-  '@xiongtao.xt/tau-plugins@0.45.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(slate-dom@0.147.0(slate@0.126.2))':
+  '@xiongtao.xt/tau-plugins@file:../../output/plugin-sdk/xiongtao.xt-tau-plugins-0.62.0.tgz(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(slate-dom@0.147.0(slate@0.126.2))':
     dependencies:
       '@types/react': 19.2.0
       '@types/react-dom': 19.2.0(@types/react@19.2.0)
@@ -1776,6 +1789,7 @@ snapshots:
       slate: 0.126.2
       slate-history: 0.113.1(slate@0.126.2)
       slate-react: 0.126.4(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(slate-dom@0.147.0(slate@0.126.2))(slate@0.126.2)
+      yjs: 13.6.32
       zustand: 4.5.7(@types/react@19.2.0)(react@19.2.0)
     transitivePeerDependencies:
       - immer
@@ -2020,6 +2034,8 @@ snapshots:
 
   is-potential-custom-element-name@1.0.1: {}
 
+  isomorphic.js@0.2.5: {}
+
   jiti@2.7.0: {}
 
   js-tokens@9.0.1: {}
@@ -2051,6 +2067,10 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  lib0@0.2.120:
+    dependencies:
+      isomorphic.js: 0.2.5
 
   lightningcss-android-arm64@1.30.2:
     optional: true
@@ -2410,6 +2430,10 @@ snapshots:
   xml-name-validator@5.0.0: {}
 
   xmlchars@2.2.0: {}
+
+  yjs@13.6.32:
+    dependencies:
+      lib0: 0.2.120
 
   zustand@4.5.7(@types/react@19.2.0)(react@19.2.0):
     dependencies:

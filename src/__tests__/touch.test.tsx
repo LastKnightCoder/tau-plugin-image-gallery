@@ -5,11 +5,23 @@ import { GallerySettings } from "../components/GallerySettings";
 import { GalleryMode, type GallerySetting } from "../types";
 
 const fixture = vi.hoisted(() => ({ upload: vi.fn() }));
-vi.mock("@tau/plugins", () => ({
-  usePluginEnvironment: () => ({ input: { coarsePointer: true } }),
-  useResourceUpload: () => fixture.upload,
-  MediaImage: ({ url, ...props }: any) => <img src={url} {...props} />,
-}));
+vi.mock("@tau/plugins", async () => {
+  const { default: zhCN } = await import("../locales/zh-CN.json");
+  const dictionary = zhCN as Record<string, string>;
+  // 只替换宿主边界（环境、上传、词典运行时）；被测的设置面板逻辑保持真实
+  const interpolate = (template: string, values?: Record<string, unknown>) =>
+    template.replace(/\{\{(\w+)\}\}/g, (_, name) => String(values?.[name] ?? ""));
+  return {
+    defineI18n: () => ({ fallbackLocale: "zh-CN", resources: { "zh-CN": zhCN } }),
+    useI18n: () => ({
+      t: (key: string, values?: Record<string, unknown>) =>
+        interpolate(dictionary[key] ?? dictionary[`${key}_other`] ?? key, values),
+    }),
+    usePluginEnvironment: () => ({ input: { coarsePointer: true } }),
+    useResourceUpload: () => fixture.upload,
+    MediaImage: ({ url, ...props }: any) => <img src={url} {...props} />,
+  };
+});
 vi.mock("@tau/ui", () => {
   const Button = ({ children, variant: _variant, size: _size, ...props }: any) => <button {...props}>{children}</button>;
   const Menu = Object.assign(({ trigger, children }: any) => <div>{trigger}{children}</div>, { Item: ({ onSelect, children }: any) => <button onClick={onSelect}>{children}</button> });

@@ -19,7 +19,12 @@ import {
   Switch,
   cn,
 } from "@tau/ui";
-import { MediaImage, usePluginEnvironment, useResourceUpload } from "@tau/plugins";
+import {
+  MediaImage,
+  useI18n,
+  usePluginEnvironment,
+  useResourceUpload,
+} from "@tau/plugins";
 import {
   GalleryMode,
   type AppearancePreset,
@@ -28,11 +33,8 @@ import {
   type LastRowMode,
   type ObjectFitMode,
 } from "../types";
-import {
-  BORDER_RADIUS_OPTIONS,
-  SHADOW_OPTIONS,
-  normalizeShadow,
-} from "../appearance";
+import { normalizeShadow } from "../appearance";
+import { messages, type MessageKey } from "../i18n";
 
 interface GallerySettingsProps {
   setting: GallerySetting;
@@ -105,26 +107,34 @@ const withTimeout = <T,>(promise: Promise<T>) =>
     ),
   ]);
 
-const MODE_OPTIONS = [
-  { value: GalleryMode.Horizontal, label: "横向排版" },
-  { value: GalleryMode.Vertical, label: "瀑布流" },
-  { value: GalleryMode.Inline, label: "轮播" },
+const MODE_OPTIONS: { value: GalleryMode; label: MessageKey }[] = [
+  { value: GalleryMode.Horizontal, label: "settings.mode.horizontal" },
+  { value: GalleryMode.Vertical, label: "settings.mode.vertical" },
+  { value: GalleryMode.Inline, label: "settings.mode.carousel" },
 ];
-const LAST_ROW_OPTIONS: { value: LastRowMode; label: string }[] = [
-  { value: "justify", label: "拉伸填充" },
-  { value: "nojustify", label: "保持原样" },
-  { value: "center", label: "居中对齐" },
-  { value: "right", label: "靠右对齐" },
-  { value: "hide", label: "隐藏" },
+const LAST_ROW_OPTIONS: { value: LastRowMode; label: MessageKey }[] = [
+  { value: "justify", label: "settings.lastRow.justify" },
+  { value: "nojustify", label: "settings.lastRow.nojustify" },
+  { value: "center", label: "settings.lastRow.center" },
+  { value: "right", label: "settings.lastRow.right" },
+  { value: "hide", label: "settings.lastRow.hide" },
 ];
-const OBJECT_FIT_OPTIONS: { value: ObjectFitMode; label: string }[] = [
-  { value: "contain", label: "完整显示" },
-  { value: "cover", label: "裁切填满" },
+const OBJECT_FIT_OPTIONS: { value: ObjectFitMode; label: MessageKey }[] = [
+  { value: "contain", label: "settings.objectFit.contain" },
+  { value: "cover", label: "settings.objectFit.cover" },
 ];
-const COLUMN_OPTIONS = [2, 3, 4, 5].map((count) => ({
-  value: count,
-  label: `${count} 列`,
-}));
+const RADIUS_LABELS: Record<AppearancePreset, MessageKey> = {
+  none: "settings.radius.none",
+  sm: "settings.radius.sm",
+  md: "settings.radius.md",
+  lg: "settings.radius.lg",
+};
+const SHADOW_LABELS: Record<AppearancePreset, MessageKey> = {
+  none: "settings.shadow.none",
+  sm: "settings.shadow.sm",
+  md: "settings.shadow.md",
+  lg: "settings.shadow.lg",
+};
 
 function ImageTile({
   item,
@@ -137,6 +147,7 @@ function ImageTile({
   onDelete(): void;
   coarsePointer?: boolean;
 }) {
+  const { t } = useI18n(messages);
   return (
     <div
       className={cn(
@@ -157,8 +168,8 @@ function ImageTile({
           event.stopPropagation();
           onDelete();
         }}
-        aria-label="删除图片"
-        title="删除图片"
+        aria-label={t("images.delete")}
+        title={t("images.delete")}
         className={cn("ig:bg-surface/90 ig:text-ink-2 ig:shadow-float ig:enabled:hover:bg-danger ig:enabled:hover:text-ink-inverse ig:absolute ig:right-1.5 ig:top-1.5 ig:rounded-full ig:focus-visible:opacity-100 ig:group-hover:opacity-100", coarsePointer ? "ig:size-10 ig:opacity-100" : "ig:size-6 ig:opacity-0")}
       >
         <X className="ig:size-3.5" />
@@ -171,6 +182,7 @@ export function GallerySettings({
   setting,
   onSettingChange,
 }: GallerySettingsProps) {
+  const { t } = useI18n(messages);
   const { coarsePointer, finePointer } = usePluginEnvironment().input;
   const active = useRef(true);
   useEffect(() => { active.current = true; return () => { active.current = false; }; }, []);
@@ -263,30 +275,30 @@ export function GallerySettings({
   };
   const moveControls = (index: number) => (
     <div className="ig:mt-2 ig:flex ig:gap-2">
-      <Button size="sm" variant="secondary" disabled={index === 0} aria-label={`前移图片 ${index + 1}`} onClick={() => moveImage(index, index - 1)}>前移</Button>
-      <Button size="sm" variant="secondary" disabled={index === setting.images.length - 1} aria-label={`后移图片 ${index + 1}`} onClick={() => moveImage(index, index + 1)}>后移</Button>
+      <Button size="sm" variant="secondary" disabled={index === 0} aria-label={t("images.moveBack.aria", { position: index + 1 })} onClick={() => moveImage(index, index - 1)}>{t("images.moveBack")}</Button>
+      <Button size="sm" variant="secondary" disabled={index === setting.images.length - 1} aria-label={t("images.moveForward.aria", { position: index + 1 })} onClick={() => moveImage(index, index + 1)}>{t("images.moveForward")}</Button>
     </div>
   );
 
   return (
     <div className="ig:flex ig:flex-col ig:gap-6">
-      <FormField label="显示模式">
+      <FormField label={t("settings.mode")}>
         {(field) => (
           <Select
             id={field.id}
             value={setting.mode}
-            options={MODE_OPTIONS}
+            options={MODE_OPTIONS.map(({ value, label }) => ({ value, label: t(label) }))}
             onValueChange={(mode) => patch({ mode })}
           />
         )}
       </FormField>
 
       <section className="ig:flex ig:flex-col ig:gap-4">
-        <SectionTitle>基础设置</SectionTitle>
+        <SectionTitle>{t("settings.section.basic")}</SectionTitle>
         <div className="ig:grid ig:grid-cols-2 ig:gap-4">
           {setting.mode === GalleryMode.Horizontal && (
             <>
-              <FormField label="图片高度">
+              <FormField label={t("settings.imageHeight")}>
                 {(field) => (
                   <RangeNumberInput
                     id={field.id}
@@ -297,7 +309,7 @@ export function GallerySettings({
                   />
                 )}
               </FormField>
-              <FormField label="图片间距">
+              <FormField label={t("settings.imageSpacing")}>
                 {(field) => (
                   <RangeNumberInput
                     id={field.id}
@@ -309,12 +321,12 @@ export function GallerySettings({
                 )}
               </FormField>
               <div className="ig:col-span-2">
-                <FormField label="最后一行">
+                <FormField label={t("settings.lastRow")}>
                   {(field) => (
                     <Select
                       id={field.id}
                       value={setting.lastRow || "nojustify"}
-                      options={LAST_ROW_OPTIONS}
+                      options={LAST_ROW_OPTIONS.map(({ value, label }) => ({ value, label: t(label) }))}
                       onValueChange={(lastRow) => patch({ lastRow })}
                     />
                   )}
@@ -323,12 +335,15 @@ export function GallerySettings({
             </>
           )}
           {setting.mode === GalleryMode.Vertical && (
-            <FormField label="列数">
+            <FormField label={t("settings.columns")}>
               {(field) => (
                 <Select
                   id={field.id}
                   value={setting.columnCount || 3}
-                  options={COLUMN_OPTIONS}
+                  options={[2, 3, 4, 5].map((count) => ({
+                    value: count,
+                    label: t("settings.columnCount", { count }),
+                  }))}
                   onValueChange={(columnCount) => patch({ columnCount })}
                 />
               )}
@@ -336,12 +351,12 @@ export function GallerySettings({
           )}
           {setting.mode === GalleryMode.Inline && (
             <div className="ig:col-span-2">
-              <FormField label="图片显示">
+              <FormField label={t("settings.objectFit")}>
                 {(field) => (
                   <Select
                     id={field.id}
                     value={setting.objectFit || "contain"}
-                    options={OBJECT_FIT_OPTIONS}
+                    options={OBJECT_FIT_OPTIONS.map(({ value, label }) => ({ value, label: t(label) }))}
                     onValueChange={(objectFit) => patch({ objectFit })}
                   />
                 )}
@@ -350,31 +365,37 @@ export function GallerySettings({
           )}
         </div>
         <Switch
-          label="更宽显示"
+          label={t("settings.wider")}
           checked={setting.wider || false}
           onCheckedChange={(wider) => patch({ wider })}
         />
       </section>
 
       <section className="ig:flex ig:flex-col ig:gap-4">
-        <SectionTitle>外观设置</SectionTitle>
+        <SectionTitle>{t("settings.section.appearance")}</SectionTitle>
         <div className="ig:grid ig:grid-cols-2 ig:gap-4">
-          <FormField label="圆角">
+          <FormField label={t("settings.radius")}>
             {(field) => (
               <Select<AppearancePreset>
                 id={field.id}
                 value={setting.borderRadius || "none"}
-                options={BORDER_RADIUS_OPTIONS}
+                options={(Object.keys(RADIUS_LABELS) as AppearancePreset[]).map((value) => ({
+                  value,
+                  label: t(RADIUS_LABELS[value]),
+                }))}
                 onValueChange={(borderRadius) => patch({ borderRadius })}
               />
             )}
           </FormField>
-          <FormField label="阴影">
+          <FormField label={t("settings.shadow")}>
             {(field) => (
               <Select<AppearancePreset>
                 id={field.id}
                 value={normalizeShadow(setting.shadow)}
-                options={SHADOW_OPTIONS}
+                options={(Object.keys(SHADOW_LABELS) as AppearancePreset[]).map((value) => ({
+                  value,
+                  label: t(SHADOW_LABELS[value]),
+                }))}
                 onValueChange={(shadow) => patch({ shadow })}
               />
             )}
@@ -386,11 +407,11 @@ export function GallerySettings({
         <SectionTitle
           extra={
             <span className="ig:text-ink-3 ig:text-tau-meta">
-              {setting.images.length} 张图片
+              {t("settings.imagesCount", { count: setting.images.length })}
             </span>
           }
         >
-          图片管理
+          {t("settings.section.images")}
         </SectionTitle>
 
         {uploading && (
@@ -401,11 +422,14 @@ export function GallerySettings({
             <Spinner className="ig:size-5" />
             <div className="ig:flex-1">
               <div className="ig:text-accent-text ig:text-tau-body ig:font-medium">
-                上传中…
+                {t("upload.inProgress")}
               </div>
               <div className="ig:text-ink-2 ig:text-tau-meta">
-                成功 {progress.success} / 失败 {progress.error} / 总计{" "}
-                {progress.total}
+                {t("upload.progress", {
+                  success: progress.success,
+                  error: progress.error,
+                  total: progress.total,
+                })}
               </div>
             </div>
           </div>
@@ -419,7 +443,7 @@ export function GallerySettings({
               lead={Link}
               value={linkUrl}
               onChange={(event) => setLinkUrl(event.target.value)}
-              placeholder="输入图片 URL"
+              placeholder={t("images.urlPlaceholder")}
               onKeyDown={(event) => {
                 if (event.nativeEvent.isComposing) return;
                 if (event.key === "Enter") {
@@ -437,10 +461,10 @@ export function GallerySettings({
               disabled={!linkUrl.trim()}
               onClick={addLink}
             >
-              添加
+              {t("link.add")}
             </Button>
             <Button variant="ghost" onClick={closeLinkInput}>
-              取消
+              {t("action.cancel")}
             </Button>
           </div>
         )}
@@ -474,7 +498,7 @@ export function GallerySettings({
                 <span className="ig:bg-surface ig:grid ig:size-10 ig:place-items-center ig:rounded-full">
                   <Plus className="ig:size-5" />
                 </span>
-                <span className="ig:text-tau-meta">添加图片</span>
+                <span className="ig:text-tau-meta">{t("images.add")}</span>
               </button>
             }
           >
@@ -483,15 +507,15 @@ export function GallerySettings({
                 icon={<Upload />}
                 onSelect={() => uploadRef.current?.click()}
               >
-                上传图片
+                {t("images.upload")}
               </Menu.Item>
             )}
             <Menu.Item icon={<Link />} onSelect={() => setShowLinkInput(true)}>
-              输入链接
+              {t("images.enterLink")}
             </Menu.Item>
           </Menu>
           {!finePointer ? setting.images.map((item, index) => (
-            <div key={item.id} aria-label={item.desc || `图片 ${index + 1}`}>
+            <div key={item.id} aria-label={item.desc || t("images.aria.numbered", { position: index + 1 })}>
               <ImageTile item={item} dragging={false} coarsePointer={coarsePointer} onDelete={() => patch({ images: setting.images.filter(image => image.id !== item.id) })} />
               {moveControls(index)}
             </div>
@@ -501,7 +525,7 @@ export function GallerySettings({
             getKey={(item) => item.id}
             onMove={moveImage}
             renderItem={(item, state) => (
-              <div aria-label={item.desc || "图片"}>
+              <div aria-label={item.desc || t("images.aria")}>
                 <div {...state.handleProps}>
                 <ImageTile
                   item={item}
@@ -527,9 +551,9 @@ export function GallerySettings({
             <div className="ig:bg-surface-hover ig:text-ink-3 ig:mb-4 ig:grid ig:size-16 ig:place-items-center ig:rounded-full">
               <ImageIcon className="ig:size-8" strokeWidth={1.5} />
             </div>
-            <p className="ig:text-ink-2 ig:text-tau-body">还没有添加图片</p>
+            <p className="ig:text-ink-2 ig:text-tau-body">{t("images.empty.title")}</p>
             <p className="ig:text-ink-3 ig:text-tau-meta ig:mt-1">
-              点击「添加图片」，或直接粘贴剪贴板里的图片
+              {t("images.empty.hint")}
             </p>
           </div>
         )}

@@ -11,6 +11,7 @@ import Gallery from "./components/Gallery";
 import { galleryActions } from "./actions";
 import { galleryCodec, galleryToHtml } from "./export";
 import { GALLERY_TYPE, GalleryMode, type ImageGalleryElement } from "./types";
+import { captureTranslator, messages, t } from "./i18n";
 
 declare const __PLUGIN_META__: { id: string; name: string; version: string };
 
@@ -53,17 +54,17 @@ export const galleryExtension: PluginEditorExtension = defineEditorExtension({
   menu: [
     {
       id: OPEN_SETTINGS,
-      title: "编辑图册",
+      title: () => t("menu.edit"),
       icon: <Images size={16} />,
       command: OPEN_SETTINGS,
     },
   ],
-  blockPanel: [
+  blockPanel: (editor) => [
     {
       icon: Images,
-      title: "图册",
+      title: t("block.title"),
       keywords: ["image-gallery", "图册", "tuce", "gallery", "画廊", "hualang"],
-      description: "多张图片横排、瀑布流或轮播",
+      description: t("block.description"),
       onClick: (editor) => {
         insertSourceBlock(editor, {
           type: GALLERY_TYPE,
@@ -79,6 +80,12 @@ export const galleryExtension: PluginEditorExtension = defineEditorExtension({
 
 export default definePlugin({
   ...__PLUGIN_META__,
+  i18n: messages,
+  create: () => ({
+    activate(context) {
+      captureTranslator(context.i18n.t);
+    },
+  }),
   editorExtensions: [galleryExtension],
   editorMetrics,
   editorCodecs: [galleryCodec],
